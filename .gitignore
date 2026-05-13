@@ -68,6 +68,18 @@ coverage/
 # Vite
 vite.config.ts.timestamp-*
 
+# Security
+*.pem
+*.key
+
+# Deploy platforms
+.vercel/
+.netlify/
+
+# Bun
+bun.lockb
+bun.lock
+
 # Misc
 *.local
 *.cache
