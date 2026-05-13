@@ -39,6 +39,7 @@
   font-size: 20px;
   font-weight: 700;
   background: linear-gradient(135deg, var(--accent), var(--accent2));
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -163,7 +164,6 @@
 .model-card {
   background: var(--surface2);
   border: 2px solid var(--border);
-  transition: all 0.2s, background 0.3s;
   border-radius: 10px;
   padding: 14px;
   cursor: pointer;
@@ -215,7 +215,6 @@
 .voice-chip {
   background: var(--surface2);
   border: 1.5px solid var(--border);
-  transition: all 0.2s, background 0.3s;
   border-radius: 8px;
   padding: 10px;
   cursor: pointer;
@@ -307,6 +306,14 @@
   border-color: var(--accent);
   color: var(--accent2);
   background: var(--accent-glow);
+}
+
+.tag-btn.active {
+  border-color: var(--accent);
+  border-style: solid;
+  background: var(--accent-glow);
+  color: var(--accent2);
+  font-weight: 600;
 }
 
 /* ─── Textarea ─────────────────────────────────────────────── */
@@ -609,7 +616,6 @@
   padding: 10px 14px;
   border-radius: 8px;
   background: var(--surface2);
-  transition: all 0.2s, background 0.3s;
   border: 1px solid transparent;
   cursor: pointer;
   transition: all 0.2s;
@@ -633,6 +639,121 @@
   font-size: 11px;
   color: var(--text2);
   opacity: 0.6;
+}
+
+/* ─── Director Mode ────────────────────────────────────────── */
+.director-mode {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.director-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.director-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent2);
+}
+
+/* ─── Tag Section ──────────────────────────────────────────── */
+.tag-section {
+  margin-bottom: 10px;
+}
+
+.tag-section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  user-select: none;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text2);
+}
+
+.tag-categories {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tag-category {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.tag-cat-label {
+  font-size: 11px;
+  color: var(--text2);
+  opacity: 0.7;
+  min-width: 60px;
+  padding-top: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.tag-cat-label.clickable {
+  cursor: pointer;
+}
+
+.tag-cat-label.clickable:hover {
+  color: var(--accent);
+  opacity: 1;
+}
+
+.tag-cat-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+
+.expand-icon,
+.expand-icon-sm {
+  font-size: 10px;
+  color: var(--text2);
+  opacity: 0.5;
+  margin-left: 4px;
+}
+
+.clickable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.clickable:hover {
+  color: var(--accent);
+}
+
+/* ─── Voice Design Tips ────────────────────────────────────── */
+.voice-design-tips {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.tips-label {
+  font-size: 11px;
+  color: var(--text2);
+  opacity: 0.7;
+}
+
+.tip {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: var(--surface2);
+  color: var(--text2);
+  border: 1px solid var(--border);
 }
 
 /* ─── Footer ───────────────────────────────────────────────── */

@@ -11,22 +11,103 @@ import {
 } from './api';
 import './App.css';
 
-// ─── Preset styles ───────────────────────────────────────────────
+// ─── Style bracket tags (音频标签 - 放在 assistant content 开头) ───
+const STYLE_BRACKET_TAGS = [
+  // 基础情绪
+  { label: '开心', tag: '(开心)', category: '基础情绪' },
+  { label: '悲伤', tag: '(悲伤)', category: '基础情绪' },
+  { label: '愤怒', tag: '(愤怒)', category: '基础情绪' },
+  { label: '恐惧', tag: '(恐惧)', category: '基础情绪' },
+  { label: '惊讶', tag: '(惊讶)', category: '基础情绪' },
+  { label: '兴奋', tag: '(兴奋)', category: '基础情绪' },
+  { label: '委屈', tag: '(委屈)', category: '基础情绪' },
+  { label: '平静', tag: '(平静)', category: '基础情绪' },
+  { label: '冷漠', tag: '(冷漠)', category: '基础情绪' },
+  // 复合情绪
+  { label: '怅然', tag: '(怅然)', category: '复合情绪' },
+  { label: '欣慰', tag: '(欣慰)', category: '复合情绪' },
+  { label: '无奈', tag: '(无奈)', category: '复合情绪' },
+  { label: '愧疚', tag: '(愧疚)', category: '复合情绪' },
+  { label: '释然', tag: '(释然)', category: '复合情绪' },
+  { label: '嫉妒', tag: '(嫉妒)', category: '复合情绪' },
+  { label: '动情', tag: '(动情)', category: '复合情绪' },
+  // 整体语调
+  { label: '温柔', tag: '(温柔)', category: '整体语调' },
+  { label: '高冷', tag: '(高冷)', category: '整体语调' },
+  { label: '活泼', tag: '(活泼)', category: '整体语调' },
+  { label: '严肃', tag: '(严肃)', category: '整体语调' },
+  { label: '慵懒', tag: '(慵懒)', category: '整体语调' },
+  { label: '俏皮', tag: '(俏皮)', category: '整体语调' },
+  { label: '深沉', tag: '(深沉)', category: '整体语调' },
+  { label: '凌厉', tag: '(凌厉)', category: '整体语调' },
+  // 音色定位
+  { label: '磁性', tag: '(磁性)', category: '音色定位' },
+  { label: '醇厚', tag: '(醇厚)', category: '音色定位' },
+  { label: '清亮', tag: '(清亮)', category: '音色定位' },
+  { label: '空灵', tag: '(空灵)', category: '音色定位' },
+  { label: '甜美', tag: '(甜美)', category: '音色定位' },
+  { label: '沙哑', tag: '(沙哑)', category: '音色定位' },
+  // 人设腔调
+  { label: '夹子音', tag: '(夹子音)', category: '人设腔调' },
+  { label: '御姐音', tag: '(御姐音)', category: '人设腔调' },
+  { label: '正太音', tag: '(正太音)', category: '人设腔调' },
+  { label: '大叔音', tag: '(大叔音)', category: '人设腔调' },
+  { label: '台湾腔', tag: '(台湾腔)', category: '人设腔调' },
+  // 方言
+  { label: '东北话', tag: '(东北话)', category: '方言' },
+  { label: '四川话', tag: '(四川话)', category: '方言' },
+  { label: '河南话', tag: '(河南话)', category: '方言' },
+  { label: '粤语', tag: '(粤语)', category: '方言' },
+  // 其他
+  { label: '唱歌', tag: '(唱歌)', category: '其他' },
+];
+
+// ─── Inline audio tags (音频标签 - 插入文本任意位置) ─────────────
+const INLINE_TAGS = [
+  // 语速与节奏
+  { label: '吸气', tag: '[吸气]', category: '语速与节奏' },
+  { label: '深呼吸', tag: '[深呼吸]', category: '语速与节奏' },
+  { label: '叹气', tag: '[叹气]', category: '语速与节奏' },
+  { label: '长叹一口气', tag: '[长叹一口气]', category: '语速与节奏' },
+  { label: '喘息', tag: '[喘息]', category: '语速与节奏' },
+  { label: '屏息', tag: '[屏息]', category: '语速与节奏' },
+  { label: '停顿', tag: '[停顿]', category: '语速与节奏' },
+  // 情绪状态
+  { label: '紧张', tag: '[紧张]', category: '情绪状态' },
+  { label: '害怕', tag: '[害怕]', category: '情绪状态' },
+  { label: '激动', tag: '[激动]', category: '情绪状态' },
+  { label: '疲惫', tag: '[疲惫]', category: '情绪状态' },
+  { label: '委屈', tag: '[委屈]', category: '情绪状态' },
+  { label: '撒娇', tag: '[撒娇]', category: '情绪状态' },
+  { label: '心虚', tag: '[心虚]', category: '情绪状态' },
+  { label: '震惊', tag: '[震惊]', category: '情绪状态' },
+  { label: '不耐烦', tag: '[不耐烦]', category: '情绪状态' },
+  // 语音特征
+  { label: '颤抖', tag: '[颤抖]', category: '语音特征' },
+  { label: '声音颤抖', tag: '[声音颤抖]', category: '语音特征' },
+  { label: '变调', tag: '[变调]', category: '语音特征' },
+  { label: '破音', tag: '[破音]', category: '语音特征' },
+  { label: '鼻音', tag: '[鼻音]', category: '语音特征' },
+  { label: '气声', tag: '[气声]', category: '语音特征' },
+  // 哭笑表达
+  { label: '笑', tag: '[笑]', category: '哭笑表达' },
+  { label: '轻笑', tag: '[轻笑]', category: '哭笑表达' },
+  { label: '大笑', tag: '[大笑]', category: '哭笑表达' },
+  { label: '冷笑', tag: '[冷笑]', category: '哭笑表达' },
+  { label: '抽泣', tag: '[抽泣]', category: '哭笑表达' },
+  { label: '呜咽', tag: '[呜咽]', category: '哭笑表达' },
+  { label: '哽咽', tag: '[哽咽]', category: '哭笑表达' },
+  { label: '嚎啕大哭', tag: '[嚎啕大哭]', category: '哭笑表达' },
+];
+
+// ─── Natural language style presets (放在 user message) ──────────
 const STYLE_PRESETS = [
   { label: '默认', value: '' },
   { label: '开心活泼', value: 'Bright, bouncy, slightly sing-song tone — like bursting with good news. Fast pace, rising pitch at the end.' },
   { label: '温柔低语', value: 'Gentle whisper, soft and intimate, as if sharing a secret. Slow pace, breathy quality.' },
   { label: '新闻播报', value: 'Professional news anchor tone, clear and authoritative, moderate pace, confident delivery.' },
   { label: '讲故事', value: 'Warm storytelling voice, engaging and expressive, with natural pauses for dramatic effect.' },
-  { label: '东北话', value: '(东北话)' },
-  { label: '四川话', value: '(四川话)' },
-  { label: '粤语', value: '(粤语)' },
-  { label: '唱歌', value: '(唱歌)' },
-  { label: '懒洋洋', value: '(懒洋洋)' },
-  { label: '磁性男声', value: '(磁性)' },
-  { label: '甜美女声', value: '(甜美)' },
-  { label: '夹子音', value: '(夹子音)' },
-  { label: '大叔音', value: '(大叔音)' },
+  { label: '导演模式', value: '' },
 ];
 
 // ─── Voice Design presets ────────────────────────────────────────
@@ -39,19 +120,23 @@ const VOICE_DESIGN_PRESETS = [
   { label: 'ASMR 耳语', value: 'Young female, extreme close-up ASMR feel. Audible breathing, subtle lip sounds. Speaks very slowly, deeply relaxing.' },
   { label: '播客主持人', value: 'A charismatic podcast host in his 30s, conversational and engaging, natural rhythm, warm and relatable.' },
   { label: '电影旁白', value: 'A cinematic narrator with a deep, resonant voice, dramatic and powerful, like a movie trailer voiceover.' },
+  { label: '评书先生', value: '一位评书先生，嗓音洪亮富有穿透力，节奏张弛有度，善于用停顿制造悬念，带着传统曲艺的韵味。' },
+  { label: '深夜电台DJ', value: 'A late-night radio DJ with a smooth, velvety baritone. Speaks slowly and intimately, as if sharing secrets with a single listener. Warm, slightly husky, with a gentle rhythmic cadence.' },
 ];
 
-// ─── Tag snippets for quick insert ───────────────────────────────
-const TAG_SNIPPETS = [
-  { label: '叹气', tag: '[叹气]' },
-  { label: '深呼吸', tag: '[深吸一口气]' },
-  { label: '笑', tag: '[笑]' },
-  { label: '大笑', tag: '[大笑]' },
-  { label: '哭泣', tag: '[啜泣]' },
-  { label: '紧张', tag: '[紧张]' },
-  { label: '颤抖', tag: '[声音颤抖]' },
-  { label: '停顿', tag: '[停顿]' },
-];
+// ─── Director mode template ──────────────────────────────────────
+const DIRECTOR_TEMPLATE = `【角色】
+
+【场景】
+
+【指导】
+- 语速与顿挫：
+- 气声与实声：
+- 咬字肌理：`;
+
+// ─── Categories for display ──────────────────────────────────────
+const TAG_CATEGORIES = ['语速与节奏', '情绪状态', '语音特征', '哭笑表达'];
+const STYLE_CATEGORIES = ['基础情绪', '复合情绪', '整体语调', '音色定位', '人设腔调', '方言', '其他'];
 
 function App() {
   // ─── State ─────────────────────────────────────────────────────
@@ -59,7 +144,6 @@ function App() {
     return (localStorage.getItem('tts-theme') as 'light' | 'dark') || 'light';
   });
 
-  // Apply theme to document
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('tts-theme', theme);
@@ -76,6 +160,20 @@ function App() {
   const [optimizeTextPreview, setOptimizeTextPreview] = useState(true);
   const [cloneFile, setCloneFile] = useState<File | null>(null);
   const [cloneBase64, setCloneBase64] = useState<string>('');
+
+  // Director mode state
+  const [directorRole, setDirectorRole] = useState('');
+  const [directorScene, setDirectorScene] = useState('');
+  const [directorDirection, setDirectorDirection] = useState('');
+  const [isDirectorMode, setIsDirectorMode] = useState(false);
+
+  // Active style bracket tag
+  const [activeStyleBracket, setActiveStyleBracket] = useState('');
+
+  // Tag panel collapse state
+  const [tagPanelExpanded, setTagPanelExpanded] = useState(true);
+  const [styleBracketExpanded, setStyleBracketExpanded] = useState(true);
+  const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({});
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -96,9 +194,8 @@ function App() {
   const saveHistory = useCallback((items: HistoryItem[]) => {
     setHistory(items);
     try {
-      // Keep max 20 items, only save metadata (not audio urls which are blob URLs)
       const toSave = items.slice(0, 20).map(({ audioUrl, ...rest }) => rest);
-      localStorage.setItem('tts-history-meta', JSON.stringify(toSave));
+      localStorage.setItem('tts-history', JSON.stringify(toSave));
     } catch {}
   }, []);
 
@@ -164,6 +261,38 @@ function App() {
     }, 0);
   }, [text]);
 
+  // ─── Insert style bracket tag at beginning of text ─────────────
+  const insertStyleBracket = useCallback((tag: string) => {
+    // Remove existing style bracket if any
+    const cleaned = text.replace(/^\([^)]+\)/, '').replace(/^（[^）]+）/, '');
+    const newText = tag + cleaned;
+    setText(newText);
+    setActiveStyleBracket(tag);
+  }, [text]);
+
+  // ─── Toggle tag category ───────────────────────────────────────
+  const toggleCategory = useCallback((cat: string) => {
+    setExpandedCategories(prev => ({ ...prev, [cat]: !prev[cat] }));
+  }, []);
+
+  // ─── Apply director mode template ──────────────────────────────
+  const applyDirectorTemplate = useCallback(() => {
+    setStyleInstruction(DIRECTOR_TEMPLATE);
+    setIsDirectorMode(true);
+    setSelectedStylePreset('导演模式');
+    setActiveStyleBracket('');
+  }, []);
+
+  // ─── Build style instruction from director fields ──────────────
+  const buildDirectorInstruction = useCallback(() => {
+    if (!isDirectorMode) return styleInstruction;
+    let instruction = '';
+    if (directorRole.trim()) instruction += `【角色】${directorRole.trim()}\n`;
+    if (directorScene.trim()) instruction += `【场景】${directorScene.trim()}\n`;
+    if (directorDirection.trim()) instruction += `【指导】\n${directorDirection.trim()}`;
+    return instruction.trim();
+  }, [isDirectorMode, directorRole, directorScene, directorDirection, styleInstruction]);
+
   // ─── Generate TTS ──────────────────────────────────────────────
   const handleGenerate = useCallback(async () => {
     if (!text.trim()) {
@@ -185,22 +314,23 @@ function App() {
 
       if (model === 'mimo-v2.5-tts') {
         req.voice = voice;
-        if (styleInstruction.trim()) {
-          req.styleInstruction = styleInstruction.trim();
+        const instruction = buildDirectorInstruction();
+        if (instruction) {
+          req.styleInstruction = instruction;
         }
       } else if (model === 'mimo-v2.5-tts-voicedesign') {
         req.voiceDesignPrompt = voiceDesignPrompt.trim();
         req.optimizeTextPreview = optimizeTextPreview;
       } else if (model === 'mimo-v2.5-tts-voiceclone') {
         req.voice = cloneBase64;
-        if (styleInstruction.trim()) {
-          req.styleInstruction = styleInstruction.trim();
+        const instruction = buildDirectorInstruction();
+        if (instruction) {
+          req.styleInstruction = instruction;
         }
       }
 
       const response = await generateTTS(req);
 
-      // Convert to playable blob URL
       let blob: Blob;
       if (response.format === 'pcm16') {
         blob = pcm16ToWav(response.audioData);
@@ -210,7 +340,6 @@ function App() {
       const url = URL.createObjectURL(blob);
       setCurrentAudio(url);
 
-      // Add to history
       const item: HistoryItem = {
         id: Date.now().toString(),
         timestamp: Date.now(),
@@ -223,7 +352,7 @@ function App() {
     } finally {
       setLoading(false);
     }
-  }, [model, text, voice, styleInstruction, voiceDesignPrompt, audioFormat, optimizeTextPreview, cloneBase64, history, saveHistory]);
+  }, [model, text, voice, voiceDesignPrompt, audioFormat, optimizeTextPreview, cloneBase64, history, saveHistory, buildDirectorInstruction]);
 
   // ─── Play history item ─────────────────────────────────────────
   const playHistory = useCallback((item: HistoryItem) => {
@@ -348,7 +477,7 @@ function App() {
                   <div className="upload-placeholder">
                     <span className="upload-icon">{dragging ? '📥' : '📁'}</span>
                     <span>{dragging ? '松开即可上传' : '点击或拖拽 WAV/MP3 文件到此处'}</span>
-                    <span className="upload-hint">支持 .wav .mp3 · 最大 10MB</span>
+                    <span className="upload-hint">支持 .wav .mp3 · 最大 10MB · Base64 前缀自动添加</span>
                   </div>
                 )}
               </label>
@@ -380,6 +509,15 @@ function App() {
                 onChange={(e) => setVoiceDesignPrompt(e.target.value)}
                 rows={3}
               />
+              <div className="voice-design-tips">
+                <span className="tips-label">关键维度：</span>
+                <span className="tip">性别与年龄</span>
+                <span className="tip">音色/质感</span>
+                <span className="tip">情绪/语气</span>
+                <span className="tip">语速/节奏</span>
+                <span className="tip">角色/人设</span>
+                <span className="tip">场景描写</span>
+              </div>
             </section>
           )}
 
@@ -388,7 +526,7 @@ function App() {
             <section className="section">
               <h2 className="section-title">
                 风格控制
-                <span className="section-hint">（可选 · 自然语言描述）</span>
+                <span className="section-hint">（自然语言 → user message）</span>
               </h2>
               <div className="preset-row">
                 {STYLE_PRESETS.map((p) => (
@@ -396,21 +534,105 @@ function App() {
                     key={p.label}
                     className={`preset-chip ${selectedStylePreset === p.label ? 'active' : ''}`}
                     onClick={() => {
-                      setSelectedStylePreset(p.label);
-                      setStyleInstruction(p.value);
+                      if (p.label === '导演模式') {
+                        applyDirectorTemplate();
+                      } else {
+                        setSelectedStylePreset(p.label);
+                        setStyleInstruction(p.value);
+                        setIsDirectorMode(false);
+                        setDirectorRole('');
+                        setDirectorScene('');
+                        setDirectorDirection('');
+                        setActiveStyleBracket('');
+                      }
                     }}
                   >
                     {p.label}
                   </button>
                 ))}
               </div>
-              <textarea
-                className="textarea small"
-                placeholder="用自然语言描述语音风格，例如：用欢快活泼的语气，语速稍快..."
-                value={styleInstruction}
-                onChange={(e) => setStyleInstruction(e.target.value)}
-                rows={2}
-              />
+
+              {isDirectorMode ? (
+                <div className="director-mode">
+                  <div className="director-field">
+                    <label className="director-label">【角色】</label>
+                    <textarea
+                      className="textarea small"
+                      placeholder="人物身份、性格底色、外形气质与说话习惯"
+                      value={directorRole}
+                      onChange={(e) => setDirectorRole(e.target.value)}
+                      rows={2}
+                    />
+                  </div>
+                  <div className="director-field">
+                    <label className="director-label">【场景】</label>
+                    <textarea
+                      className="textarea small"
+                      placeholder="此刻发生了什么、和谁说话、情绪处在什么位置"
+                      value={directorScene}
+                      onChange={(e) => setDirectorScene(e.target.value)}
+                      rows={2}
+                    />
+                  </div>
+                  <div className="director-field">
+                    <label className="director-label">【指导】</label>
+                    <textarea
+                      className="textarea small"
+                      placeholder="语速、气息、停顿、重音、共鸣位置、音色质感、情绪起伏"
+                      value={directorDirection}
+                      onChange={(e) => setDirectorDirection(e.target.value)}
+                      rows={4}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <textarea
+                  className="textarea small"
+                  placeholder="用自然语言描述语音风格，例如：用轻快上扬的语调向领导报喜，语速稍快，带着压抑不住的激动..."
+                  value={styleInstruction}
+                  onChange={(e) => setStyleInstruction(e.target.value)}
+                  rows={2}
+                />
+              )}
+            </section>
+          )}
+
+          {/* Style Bracket Tags (built-in & clone models) */}
+          {(model === 'mimo-v2.5-tts' || model === 'mimo-v2.5-tts-voiceclone') && (
+            <section className="section">
+              <h2
+                className="section-title clickable"
+                onClick={() => setStyleBracketExpanded(!styleBracketExpanded)}
+              >
+                风格标签
+                <span className="section-hint">（括号标签 → assistant content 开头）</span>
+                <span className="expand-icon">{styleBracketExpanded ? '▾' : '▸'}</span>
+              </h2>
+              {styleBracketExpanded && (
+                <div className="tag-categories">
+                  {STYLE_CATEGORIES.map((cat) => {
+                    const tags = STYLE_BRACKET_TAGS.filter(t => t.category === cat);
+                    if (tags.length === 0) return null;
+                    return (
+                      <div key={cat} className="tag-category">
+                        <span className="tag-cat-label clickable">{cat}</span>
+                        <div className="tag-cat-tags">
+                          {tags.map((t) => (
+                            <button
+                              key={t.label}
+                              className={`tag-btn ${activeStyleBracket === t.tag ? 'active' : ''}`}
+                              onClick={() => insertStyleBracket(t.tag)}
+                              title={t.tag}
+                            >
+                              {t.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </section>
           )}
 
@@ -426,7 +648,7 @@ function App() {
                 >
                   {f.toUpperCase()}
                   <span className="format-hint">
-                    {f === 'wav' ? '可直接播放' : 'PCM 原始数据'}
+                    {f === 'wav' ? '可直接播放' : 'PCM 原始数据 (24kHz)'}
                   </span>
                 </button>
               ))}
@@ -460,20 +682,50 @@ function App() {
               </span>
             </h2>
 
-            {/* Tag quick insert */}
+            {/* Inline tag quick insert (built-in model only) */}
             {model === 'mimo-v2.5-tts' && (
-              <div className="tag-row">
-                <span className="tag-label">快速插入：</span>
-                {TAG_SNIPPETS.map((t) => (
-                  <button
-                    key={t.label}
-                    className="tag-btn"
-                    onClick={() => insertTag(t.tag)}
-                    title={t.tag}
-                  >
-                    {t.label}
-                  </button>
-                ))}
+              <div className="tag-section">
+                <div
+                  className="tag-section-header"
+                  onClick={() => setTagPanelExpanded(!tagPanelExpanded)}
+                >
+                  <span className="tag-label">音频标签</span>
+                  <span className="section-hint">（方括号标签 → 插入文本任意位置）</span>
+                  <span className="expand-icon">{tagPanelExpanded ? '▾' : '▸'}</span>
+                </div>
+                {tagPanelExpanded && (
+                  <div className="tag-categories">
+                    {TAG_CATEGORIES.map((cat) => {
+                      const tags = INLINE_TAGS.filter(t => t.category === cat);
+                      const isExpanded = expandedCategories[cat] !== false;
+                      return (
+                        <div key={cat} className="tag-category">
+                          <span
+                            className="tag-cat-label clickable"
+                            onClick={() => toggleCategory(cat)}
+                          >
+                            {cat}
+                            <span className="expand-icon-sm">{isExpanded ? '▾' : '▸'}</span>
+                          </span>
+                          {isExpanded && (
+                            <div className="tag-cat-tags">
+                              {tags.map((t) => (
+                                <button
+                                  key={t.label}
+                                  className="tag-btn"
+                                  onClick={() => insertTag(t.tag)}
+                                  title={t.tag}
+                                >
+                                  {t.label}
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             )}
 
@@ -545,7 +797,7 @@ function App() {
                   className="clear-btn"
                   onClick={() => {
                     setHistory([]);
-                    localStorage.removeItem('tts-history-meta');
+                    localStorage.removeItem('tts-history');
                   }}
                 >
                   清空
