@@ -73,3 +73,6 @@ vite.config.ts.timestamp-*
 *.cache
 *.tmp
 *.temp
+
+# Deploy scripts (may contain sensitive data)
+deploy.sh
