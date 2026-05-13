@@ -79,6 +79,26 @@
   border: 1px solid var(--accent);
 }
 
+.github-link {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+
+.github-link:hover {
+  border-color: var(--accent);
+  background: var(--accent-glow);
+  transform: scale(1.05);
+}
+
 /* ─── Main ─────────────────────────────────────────────────── */
 .main {
   flex: 1;

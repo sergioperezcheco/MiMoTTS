@@ -106,19 +106,17 @@ npm run dev
 
 ### 方式一：通过 GitHub 自动部署
 
-1. **推送代码到 GitHub**
+1. **Fork 或克隆仓库**
 
 ```bash
-git init
-git add -A
-git commit -m "init"
-gh repo create MiMoTTS --public --source=. --push
+git clone https://github.com/sergioperezcheco/MiMoTTS.git
+cd MiMoTTS
 ```
 
 2. **连接 Cloudflare Pages**
    - 登录 [Cloudflare Dashboard](https://dash.cloudflare.com/)
-   - 进入 **Workers & Pages** → **Create**
-   - 连接你的 GitHub 仓库
+   - 进入 **Workers & Pages** → **Create** → **Pages**
+   - 选择 **Connect to Git**，连接你的 GitHub 仓库
 
 3. **配置构建设置**
    - **Framework preset**: Vite
@@ -128,6 +126,8 @@ gh repo create MiMoTTS --public --source=. --push
 4. **设置环境变量** (Settings → Environment variables)
    - `MIMO_API_KEY` — 你的 MiMo API Key
    - `MIMO_BASE_URL` — API 端点 (默认: `https://token-plan-sgp.xiaomimimo.com/v1`)
+
+5. **点击 Save and Deploy**
 
 ### 方式二：通过 CLI 部署
 
