@@ -129,7 +129,42 @@ cd MiMoTTS
 
 5. **点击 Save and Deploy**
 
-### 方式二：通过 CLI 部署
+### 方式二：通过 GitHub Actions 自动部署（推荐）
+
+项目已配置 GitHub Actions，推送到 `main` 分支后会自动部署到 Cloudflare Pages。
+
+**配置步骤：**
+
+1. **获取 Cloudflare API Token**
+   - 登录 [Cloudflare Dashboard](https://dash.cloudflare.com/)
+   - 进入 **My Profile** → **API Tokens**
+   - 点击 **Create Token**，选择 **Edit Cloudflare Workers** 模板
+   - 复制生成的 API Token
+
+2. **获取 Account ID**
+   - 在 Cloudflare Dashboard 右侧可以看到 **Account ID**
+   - 或者运行 `npx wrangler whoami` 查看
+
+3. **设置 GitHub Secrets**
+   - 进入你的 GitHub 仓库 → **Settings** → **Secrets and variables** → **Actions**
+   - 添加以下 Secrets：
+     - `CLOUDFLARE_API_TOKEN` — 你的 Cloudflare API Token
+     - `CLOUDFLARE_ACCOUNT_ID` — 你的 Account ID
+
+4. **设置环境变量**
+   - 在 Cloudflare Dashboard 中设置 `MIMO_API_KEY` 环境变量
+
+5. **推送代码**
+   ```bash
+   git push origin main
+   ```
+   GitHub Actions 会自动构建并部署到 Cloudflare Pages
+
+**查看部署状态：**
+- GitHub 仓库 → **Actions** 标签页
+- Cloudflare Dashboard → **Workers & Pages** → **mimotts**
+
+### 方式三：通过 CLI 部署
 
 ```bash
 # 设置密钥
