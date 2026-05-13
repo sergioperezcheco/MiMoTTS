@@ -71,7 +71,7 @@ git push origin main
 
 | 变量名 | 值 | 环境 |
 |--------|-----|------|
-| `MIMO_API_KEY` | `tp-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx` | Production |
+| `MIMO_API_KEY` | `tp-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx` (你自己的 Key) | Production |
 | `MIMO_BASE_URL` | `https://token-plan-sgp.xiaomimimo.com/v1` | Production |
 
 ### 5. 部署
