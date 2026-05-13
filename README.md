@@ -162,6 +162,36 @@ npx wrangler pages secret put MIMO_API_KEY
 npx wrangler pages deploy dist
 ```
 
+## Docker 部署
+
+### 使用 Docker Compose（推荐）
+
+确保 `.env` 文件已配置 API Key，然后：
+
+```bash
+docker compose up --build -d
+```
+
+访问 http://localhost:3000 即可。
+
+停止容器：
+
+```bash
+docker compose down
+```
+
+### 使用 Docker 命令
+
+```bash
+# 构建镜像
+docker build -t mimotts .
+
+# 运行容器
+docker run -d -p 3000:3000 -e MIMO_API_KEY=your_api_key mimotts
+```
+
+> Docker 部署使用内置的 Node.js 轻量服务器（`server.mjs`）替代 Cloudflare Pages Functions，功能完全一致。
+
 ## 技术架构
 
 ```
@@ -193,7 +223,10 @@ MiMoTTS/
 ├── .env.example         # 环境变量示例
 ├── package.json         # 项目配置
 ├── tsconfig.json        # TypeScript 配置
+├── server.mjs           # Docker 部署用 Node.js 服务器
 ├── vite.config.ts       # Vite 配置（含 dev 代理）
+├── Dockerfile           # Docker 镜像构建文件
+├── docker-compose.yml   # Docker Compose 配置
 └── wrangler.toml        # Cloudflare 配置
 ```
 
@@ -203,6 +236,7 @@ MiMoTTS/
 |--------|------|--------|------|
 | `MIMO_API_KEY` | 是 | — | MiMo 平台 API Key |
 | `MIMO_BASE_URL` | 否 | `https://token-plan-sgp.xiaomimimo.com/v1` | API 基础 URL |
+| `PORT` | 否 | `3000` | Docker 部署时的服务端口 |
 
 ## 技术栈
 

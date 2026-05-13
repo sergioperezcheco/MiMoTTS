@@ -162,6 +162,36 @@ npx wrangler pages secret put MIMO_API_KEY
 npx wrangler pages deploy dist
 ```
 
+## Docker Deployment
+
+### Using Docker Compose (Recommended)
+
+Make sure `.env` is configured with your API key, then:
+
+```bash
+docker compose up --build -d
+```
+
+Visit http://localhost:3000.
+
+Stop the container:
+
+```bash
+docker compose down
+```
+
+### Using Docker CLI
+
+```bash
+# Build image
+docker build -t mimotts .
+
+# Run container
+docker run -d -p 3000:3000 -e MIMO_API_KEY=your_api_key mimotts
+```
+
+> Docker deployment uses a lightweight built-in Node.js server (`server.mjs`) in place of Cloudflare Pages Functions, with identical functionality.
+
 ## Architecture
 
 ```
@@ -193,7 +223,10 @@ MiMoTTS/
 ├── .env.example         # Environment variable template
 ├── package.json         # Project config
 ├── tsconfig.json        # TypeScript config
+├── server.mjs           # Node.js server for Docker deployment
 ├── vite.config.ts       # Vite config (with dev proxy)
+├── Dockerfile           # Docker image build file
+├── docker-compose.yml   # Docker Compose config
 └── wrangler.toml        # Cloudflare config
 ```
 
@@ -203,6 +236,7 @@ MiMoTTS/
 |----------|----------|---------|-------------|
 | `MIMO_API_KEY` | Yes | — | MiMo platform API key |
 | `MIMO_BASE_URL` | No | `https://token-plan-sgp.xiaomimimo.com/v1` | API base URL |
+| `PORT` | No | `3000` | Server port for Docker deployment |
 
 ## Tech Stack
 

@@ -76,6 +76,9 @@ vite.config.ts.timestamp-*
 .vercel/
 .netlify/
 
+# Lock files (keep package-lock.json only)
+yarn.lock
+
 # Bun
 bun.lockb
 bun.lock
