@@ -76,3 +76,7 @@ vite.config.ts.timestamp-*
 
 # Deploy scripts (may contain sensitive data)
 deploy.sh
+
+# IDE and tool configs
+.claude/
+.kiro/
